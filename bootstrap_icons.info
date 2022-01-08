@@ -1,0 +1,7 @@
+name = Bootstrap Icons
+description = Provides the Bootstrap Icons library of over 1500 icons as SVGs, SVG sprites, or web fonts.
+backdrop = 1.x
+type = module
+tags[] = Bootstrap
+
+configure = admin/config/content/bootstrap_icons
