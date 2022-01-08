@@ -1,0 +1,62 @@
+<?php
+/**
+ * @file
+ *
+ * Provides the Bootstrap Icons library of icons.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function bootstrap_icons_menu() {
+  $items['admin/config/content/bootstrap_icons'] = array(
+    'title' => 'Bootstrap Icons',
+    'description' => 'Configure the Bootstrap Icons library',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('bootstrap_icons_settings_form'),
+    'file' => 'bootstrap_icons.admin.inc',
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function bootstrap_icons_init() {
+  $version = config_get('bootstrap_icons.settings', 'version');
+  if (!$version) {
+    return;
+  }
+  if ($version == '1.7.2') {
+    // CDN
+    $data = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@' . $version . '/font/bootstrap-icons.css';
+    $type = 'file';
+  }
+  else {
+    // Local bundled
+    $module_path = backdrop_get_path('module', 'bootstrap_icons');
+    $data = '/' . $module_path . '/bootstrap-icons/font/bootstrap-icons.css';
+    $type = 'external';
+  }
+  backdrop_add_css($data, array(
+    'type' => $type,
+    'every_page' => TRUE,
+    'every_page_weight' => -1,
+    'media' => 'all',
+    'preprocess' => TRUE,
+    'group' => CSS_DEFAULT,
+    'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+  ));
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function bootstrap_icons_config_info() {
+  $prefixes['bootstrap_icons.settings'] = array(
+    'label' => t('Bootstrap Icons settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
